@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Learn_Morozov"
         mc:Ignorable="d"
-        Title="addNewService" Height="450" Width="800" KeyDown="Window_KeyDown">
+        Title="addNewService" Height="450" Width="800" KeyDown="Window_KeyDown" ResizeMode="NoResize">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
