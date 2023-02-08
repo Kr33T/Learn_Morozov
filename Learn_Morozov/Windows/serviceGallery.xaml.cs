@@ -39,12 +39,15 @@ namespace Learn_Morozov.Windows
 
         private void selectBTN_Click(object sender, RoutedEventArgs e)
         {
-            int id = Convert.ToInt32(imageL.SelectedValue.ToString());
-            ServicePhoto sp = DBHelper.le.ServicePhoto.FirstOrDefault(x => x.ID == id);
-            s.MainImagePath = sp.PhotoPath;
-            DBHelper.le.SaveChanges();
+            if (imageL.SelectedItem != null)
+            {
+                int id = Convert.ToInt32(imageL.SelectedValue.ToString());
+                ServicePhoto sp = DBHelper.le.ServicePhoto.FirstOrDefault(x => x.ID == id);
+                s.MainImagePath = sp.PhotoPath;
+                DBHelper.le.SaveChanges();
 
-            this.Close();
+                this.Close();
+            }
         }
 
         private void deleteBTN_Click(object sender, RoutedEventArgs e)
@@ -59,22 +62,26 @@ namespace Learn_Morozov.Windows
 
         private void addBTN_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog OFD = new OpenFileDialog();
-            OFD.ShowDialog();
-            string Path = OFD.FileName;
-            string file = Path.Substring(Path.LastIndexOf('\\', Path.Length - 1));
-            string dir = Environment.CurrentDirectory.Replace("bin\\Debug", "Resources\\");
-            if (!File.Exists($"{dir}{file}"))
+            try
             {
-                File.Copy(Path, $"{dir}{file}");
-            }
-            ServicePhoto sp = new ServicePhoto();
-            sp.ServiceID = s.ID;
-            sp.PhotoPath = $"Resources\\{file}";
-            DBHelper.le.ServicePhoto.Add(sp);
-            DBHelper.le.SaveChanges();
+                OpenFileDialog OFD = new OpenFileDialog();
+                OFD.ShowDialog();
+                string Path = OFD.FileName;
+                string file = Path.Substring(Path.LastIndexOf('\\', Path.Length - 1));
+                string dir = Environment.CurrentDirectory.Replace("bin\\Debug", "Resources\\");
+                if (!File.Exists($"{dir}{file}"))
+                {
+                    File.Copy(Path, $"{dir}{file}");
+                }
+                ServicePhoto sp = new ServicePhoto();
+                sp.ServiceID = s.ID;
+                sp.PhotoPath = $"Resources\\{file}";
+                DBHelper.le.ServicePhoto.Add(sp);
+                DBHelper.le.SaveChanges();
 
-            refreshGallery();
+                refreshGallery();
+            }
+            catch { }
         }
 
         private void cancel_Click(object sender, RoutedEventArgs e)

@@ -207,6 +207,7 @@
       <DependentUpon>DBModel.edmx</DependentUpon>
       <LastGenOutput>DBModel.cs</LastGenOutput>
     </Content>
+    <Resource Include="Resources\school_logo.png" />
     <Resource Include="Resources\Английский язык.jpg" />
     <Resource Include="Resources\empty.jpg" />
     <Resource Include="Resources\for company.jpg" />

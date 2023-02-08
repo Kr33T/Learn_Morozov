@@ -15,16 +15,19 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using static System.Net.Mime.MediaTypeNames;
+using static System.Net.WebRequestMethods;
 
 namespace Learn_Morozov
 {
     /// <summary>
     /// Логика взаимодействия для addNewService.xaml
     /// </summary>
+
     public partial class addNewService : Window
     {
         Service service;
         bool isEditing = false;
+        public static bool isWindowOpened = false;
 
         public addNewService()
         {
@@ -218,15 +221,26 @@ namespace Learn_Morozov
                 else
                 {
                     MessageBox.Show("Продолжительность не может быть нулевой!");
-                    flag |= true;
+                    flag = true;
                 }
                 addService.Description = serviceDescriptionTB.Text;
-                //image
+                
+                if (!String.IsNullOrEmpty(pathOfImage))
+                {
+                    addService.MainImagePath = pathOfImage;
+                }
+                else
+                {
+                    addService.MainImagePath = $"Resources\\empty.jpg";
+                }
+
                 if (!flag)
                 {
                     DBHelper.le.Service.Add(addService);
                     DBHelper.le.SaveChanges();
                     MainWindow.edited = true;
+
+                    this.Close();
                 }
             }
         }
@@ -246,27 +260,52 @@ namespace Learn_Morozov
 
         private void openGaleryBTN_Click(object sender, RoutedEventArgs e)
         {
-            serviceGallery window = new serviceGallery(service);
-            window.Show();
-
-            window.Closing += (obj, args) =>
+            if (!isWindowOpened)
             {
-                if (!String.IsNullOrEmpty(service.MainImagePath))
+                serviceGallery window = new serviceGallery(service);
+                isWindowOpened = true;
+                window.Show();
+
+                window.Closing += (obj, args) =>
                 {
-                    string dir = Environment.CurrentDirectory.Replace("bin\\Debug", service.MainImagePath);
-                    imageI.Source = new BitmapImage(new Uri(dir));
-                }
-                else
-                {
-                    string dir = Environment.CurrentDirectory.Replace("bin\\Debug", "Resources\\empty.jpg");
-                    imageI.Source = new BitmapImage(new Uri(dir));
-                }
-            };
+                    if (!String.IsNullOrEmpty(service.MainImagePath))
+                    {
+                        string dir = Environment.CurrentDirectory.Replace("bin\\Debug", service.MainImagePath);
+                        imageI.Source = new BitmapImage(new Uri(dir));
+                    }
+                    else
+                    {
+                        string dir = Environment.CurrentDirectory.Replace("bin\\Debug", "Resources\\empty.jpg");
+                        imageI.Source = new BitmapImage(new Uri(dir));
+                    }
+                    isWindowOpened = false;
+                };
+            }
+            else
+            {
+                MessageBox.Show("Окно уже открыто");
+            }
         }
+
+        string pathOfImage = "";
 
         private void addNewBTN_Click(object sender, RoutedEventArgs e)
         {
-
+            try
+            {
+                OpenFileDialog OFD = new OpenFileDialog();
+                OFD.ShowDialog();
+                string Path = OFD.FileName;
+                string file = Path.Substring(Path.LastIndexOf('\\', Path.Length - 1));
+                string dir = Environment.CurrentDirectory.Replace("bin\\Debug", "Resources\\");
+                if (!System.IO.File.Exists($"{dir}{file}"))
+                {
+                    System.IO.File.Copy(Path, $"{dir}{file}");
+                }
+                imageI.Source = new BitmapImage(new Uri($"{dir}{file}"));
+                pathOfImage = $"Resources\\{file}";
+            }
+            catch { }
         }
     }
 }

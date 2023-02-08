@@ -5,22 +5,36 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Learn_Morozov"
         mc:Ignorable="d"
-        Title="MainWindow" Height="700" Width="1000">
+        Title="Learn" Height="700" Width="1100">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.3*"/>
-            <RowDefinition Height="4*"/>
             <RowDefinition Height="1*"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="0.4*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="0" Orientation="Horizontal">
-            <StackPanel Orientation="Horizontal" Visibility="Hidden" Name="addAndUpcomingBTNS">
-                <Button Content="Ближайшие записи" Height="30" Width="150" Name="upcomingEnteriesBTN" Click="upcomingEnteriesBTN_Click"/>
-                <Button Content="Добавить услугу" Height="30" Width="150" Name="addServiceBTN" Click="addServiceBTN_Click"/>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="10" VerticalAlignment="Center">
+                <Image Name="logoI" Source="Resources\school_logo.png" Width="100" Height="100"/>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="Learn" Foreground="#04A0FF" FontFamily="Comic Sans MS" FontSize="33" VerticalAlignment="Center" Margin="20 0 0 0"/>
+                    <TextBlock Text="Школа иностранных языков" Margin="20 0 0 0" FontFamily="Comic Sans MS" FontSize="15"/>
+                </StackPanel>
             </StackPanel>
-            <Button Content="Режим администратора" Height="30" Width="150" Click="Button_Click" Name="adminModeBTN"/>
-        </StackPanel>
-        
+
+            <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Right" Margin="10">
+                <TextBlock Text="Обычный режим" Name="currentModeTB"/>
+                <TextBlock Name="countAllRecordsTB"/>
+                <TextBlock Name="countCurrentRecordsTB"/>
+            </StackPanel>
+            
+        </Grid>
+
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1.5*"/>
@@ -28,24 +42,16 @@
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Column="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
 
-                <StackPanel Grid.Row="0" VerticalAlignment="Center">
-                    <GroupBox Header="Сортировка по стоимости">
+                <StackPanel VerticalAlignment="Top">
+                    <GroupBox Header="Сортировка по стоимости" Margin="10 0 10 10" FontSize="16">
                         <ComboBox Name="sortByCostCB" SelectionChanged="sortByCostCB_SelectionChanged">
                             <ComboBoxItem>по умолчанию</ComboBoxItem>
                             <ComboBoxItem>по возрастанию</ComboBoxItem>
                             <ComboBoxItem>по убыванию</ComboBoxItem>
                         </ComboBox>
                     </GroupBox>
-                </StackPanel>
-
-                <StackPanel Grid.Row="1" VerticalAlignment="Center">
-                    <GroupBox Header="Фильтрация по скидкам">
+                    <GroupBox Header="Фильтрация по скидкам" Margin="10 0 10 10"  FontSize="16">
                         <ComboBox Name="filterBydiscount" SelectionChanged="filterBydiscount_SelectionChanged">
                             <ComboBoxItem>по умолчанию</ComboBoxItem>
                             <ComboBoxItem>от 0% до 5%</ComboBoxItem>
@@ -55,20 +61,17 @@
                             <ComboBoxItem>от 70% до 100%</ComboBoxItem>
                         </ComboBox>
                     </GroupBox>
-                </StackPanel>
-
-                <StackPanel Grid.Row="2" VerticalAlignment="Center">
-                    <GroupBox Header="Поиск">
+                    <GroupBox Header="Поиск" Margin="10 0 10 0"  FontSize="16">
                         <StackPanel Orientation="Horizontal">
-                            <ComboBox Name="searchCB" Width="100">
+                            <ComboBox Name="searchCB" Width="105" SelectionChanged="searchCB_SelectionChanged">
                                 <ComboBoxItem>Описание</ComboBoxItem>
                                 <ComboBoxItem>Название</ComboBoxItem>
                             </ComboBox>
-                            <TextBox Name="searchTB" TextChanged="searchTB_TextChanged" Width="220"/>
+                            <TextBox Name="searchTB" TextChanged="searchTB_TextChanged" Width="225"/>
                         </StackPanel>
                     </GroupBox>
                 </StackPanel>
-                
+
             </Grid>
             
             <ListView Name="serviceLV" Grid.Column="1" Height="548" BorderThickness="0" Background="Transparent" ScrollViewer.VerticalScrollBarVisibility="Hidden">
@@ -79,13 +82,13 @@
                 </ListView.ItemsPanel>
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <Border BorderBrush="Black" BorderThickness="1" Width="645">
+                        <Border Padding="3 5 3 5" Margin="4" BorderBrush="Black" BorderThickness="1" Width="705" CornerRadius="6" Name="borderB" Loaded="borderB_Loaded" Uid="{Binding ID}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="110"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <Image Grid.Column="0" Width="100" Height="100" Uid="{Binding ID}" Name="previewImg" Loaded="previewImg_Loaded"/>
+                                <Image  Grid.Column="0" Width="100" Height="100" Uid="{Binding ID}" Name="previewImg" Loaded="previewImg_Loaded"/>
                                 <Grid Grid.Column="1">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="*"/>
@@ -93,15 +96,15 @@
                                         <RowDefinition Height="*"/>
                                         <RowDefinition Height="*"/>
                                     </Grid.RowDefinitions>
-                                    <TextBlock Uid="{Binding ID}" Grid.Row="0" Margin="10 0 0 0" Name="nameOfServiceTB" Loaded="nameOfServiceTB_Loaded"/>
+                                    <TextBlock Uid="{Binding ID}" Grid.Row="0" Margin="10 0 0 0" Name="nameOfServiceTB" FontSize="16" TextWrapping="Wrap" FontWeight="Bold" Loaded="nameOfServiceTB_Loaded"/>
                                     <StackPanel Grid.Row="1" Margin="10 0 0 0" Orientation="Horizontal">
                                         <TextBlock Uid="{Binding ID}" Name="costOfServiceTB" Loaded="costOfServiceTB_Loaded"/>
                                         <TextBlock Uid="{Binding ID}" Name="priceOfServiceTB" Loaded="priceOfServiceTB_Loaded"/>
                                     </StackPanel>
-                                    <TextBlock Uid="{Binding ID}" Margin="10 0 0 0" Grid.Row="2" Name="discountForService" Loaded="discountForService_Loaded"/>
+                                    <TextBlock Uid="{Binding ID}" Margin="10 0 0 0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Width="80" Name="discountForService" Loaded="discountForService_Loaded"/>
                                     <StackPanel Grid.Row="3" Name="buttonsSP" Loaded="buttonsSP_Loaded" Orientation="Horizontal" Visibility="Collapsed">
-                                        <Button Uid="{Binding ID}" Margin="10 0 10 0" Content="редактировать" Name="editBTN" Loaded="editBTN_Loaded" Click="editBTN_Click"/>
-                                        <Button Uid="{Binding ID}" Content="удалить" Name="deleteBTN" Loaded="deleteBTN_Loaded" Click="deleteBTN_Click"/>
+                                        <Button Uid="{Binding ID}" Margin="10 0 10 0" Content="Редактировать" Name="editBTN" Loaded="editBTN_Loaded" Click="editBTN_Click"/>
+                                        <Button Uid="{Binding ID}" Content="Удалить" Name="deleteBTN" Loaded="deleteBTN_Loaded" Click="deleteBTN_Click"/>
                                         <Button Content="Записать клиента" Margin="10 0 0 0" Name="recordClientBTN" Uid="{Binding ID}" Loaded="recordClientBTN_Loaded" Click="recordClientBTN_Click"/>
                                     </StackPanel>
                                 </Grid>
@@ -111,5 +114,14 @@
                 </ListView.ItemTemplate>
             </ListView>
         </Grid>
+
+        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="2" Orientation="Horizontal" Margin="5">
+            <StackPanel Orientation="Horizontal" Visibility="Hidden" Name="addAndUpcomingBTNS">
+                <Button Content="Ближайшие записи" Height="30" Width="150" Name="upcomingEnteriesBTN" Click="upcomingEnteriesBTN_Click"/>
+                <Button Content="Добавить услугу" Height="30" Width="150" Name="addServiceBTN" Click="addServiceBTN_Click" Margin="10 0 10 0"/>
+            </StackPanel>
+            <Button Content="Режим администратора" Height="30" Width="150" Click="Button_Click" Name="adminModeBTN"/>
+        </StackPanel>
+
     </Grid>
 </Window>

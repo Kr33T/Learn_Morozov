@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Learn_Morozov"
         mc:Ignorable="d"
-        Title="adminConfirmation" Height="150" Width="400">
+        Title="Окно подтверждения статуса" Height="180" Width="400">
     <Grid KeyDown="Grid_KeyDown">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -16,16 +16,16 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <TextBlock Text="Подтвердите, что вы администратор"/>
+            <TextBlock Text="Подтвердите, что вы администратор" FontSize="16" FontWeight="Bold"/>
         </StackPanel>
 
         <StackPanel Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <TextBlock Text="Введите пароль"/>
-            <PasswordBox Name="passwordTB" Width="300"/>
+            <TextBlock Text="Введите пароль" FontSize="14"/>
+            <PasswordBox Name="passwordTB" Width="300" FontSize="14"/>
         </StackPanel>
 
         <StackPanel Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Button Content="Подтвердить" Name="confirmBTN" Click="confirmBTN_Click" Width="100" Height="25"/>
+            <Button Content="Подтвердить" Name="confirmBTN" Click="confirmBTN_Click" Width="100" Height="25" FontSize="14"/>
         </StackPanel>
 
     </Grid>

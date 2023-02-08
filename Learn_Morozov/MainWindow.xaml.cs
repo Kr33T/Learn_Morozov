@@ -23,19 +23,21 @@ namespace Learn_Morozov
 
 
 
-    //пройтисб по тз, сделать подсветку скидок, сделать кнопку выбора фото при добавлении услуги, сместить сорт и фильтр, добавить лого, стилизировать, шрифты, посмотреть по проверкам, сделать, чтобы можно было открывать только одно окно
+    //пройтисб по тз, стилизировать, шрифты, посмотреть по проверкам, сделать, чтобы можно было открывать только одно окно
     public partial class MainWindow : Window
     {
         public static bool isAdmin = false;
-        List<Service> services;
         bool isWindowOpened = false;
 
         public MainWindow()
         {
             InitializeComponent();
             DBHelper.le = new learn_entities();
-            services = DBHelper.le.Service.ToList();
-            serviceLV.ItemsSource = services;
+            serviceLV.ItemsSource = DBHelper.le.Service.ToList();
+
+            countAllRecordsTB.Text = $"Общее количество записей: {DBHelper.le.Service.ToList().Count()}";
+            countCurrentRecordsTB.Text = $"Текущее количество записей: {DBHelper.le.Service.ToList().Count()}";
+
             sortByCostCB.SelectedIndex = 0;
             filterBydiscount.SelectedIndex = 0;
             searchCB.SelectedIndex = 0;
@@ -84,8 +86,21 @@ namespace Learn_Morozov
 
         private void upcomingEnteriesBTN_Click(object sender, RoutedEventArgs e)
         {
-            upcomingEnteries window = new upcomingEnteries();
-            window.Show();
+            if (!isWindowOpened)
+            {
+                upcomingEnteries window = new upcomingEnteries();
+                isWindowOpened = true;
+                window.Show();
+
+                window.Closing += (obj, args) =>
+                {
+                    isWindowOpened = false;
+                };
+            }
+            else
+            {
+                MessageBox.Show("Окно уже открыто");
+            }
         }
 
         public static bool edited = false;
@@ -107,6 +122,7 @@ namespace Learn_Morozov
                     }
                     edited = false;
                     isWindowOpened = false;
+                    countAllRecordsTB.Text = $"Общее количество записей: {DBHelper.le.Service.ToList().Count()}";
                 };
             }
             else
@@ -162,6 +178,7 @@ namespace Learn_Morozov
             if (!String.IsNullOrEmpty(service.Discount.ToString()) && service.Discount != 0)
             {
                 (sender as TextBlock).Text = "* скидка " + service.Discount + "%";
+                (sender as TextBlock).Background = new SolidColorBrush(Color.FromRgb(181, 230, 29));
             }
         }
 
@@ -206,47 +223,54 @@ namespace Learn_Morozov
 
         void filter()
         {
-            services = DBHelper.le.Service.ToList();
-            switch (sortByCostCB.SelectedIndex)
+            List<Service> sl =  DBHelper.le.Service.ToList();
+            try
             {
-                case 1:
-                    services = services.OrderByDescending(x => x.Cost).ToList();
-                    break;
-                case 2:
-                    services = services.OrderBy(x => x.Cost).ToList();
-                    break;
-            }
-            switch(filterBydiscount.SelectedIndex)
-            {
-                case 1:
-                    services = services.Where(x => x.Discount < 5 || x.Discount == null).ToList();
-                    break;
-                case 2:
-                    services = services.Where(x => x.Discount >= 5 && x.Discount < 15).ToList();
-                    break;
-                case 3:
-                    services = services.Where(x => x.Discount >= 15 && x.Discount < 30).ToList();
-                    break;
-                case 4:
-                    services = services.Where(x => x.Discount >= 30 && x.Discount < 70).ToList();
-                    break;
-                case 5:
-                    services = services.Where(x => x.Discount >= 70 && x.Discount < 100).ToList();
-                    break;
-            }
-            if(!String.IsNullOrEmpty(searchTB.Text))
-            {
-                switch (searchCB.SelectedIndex)
+                int costCB = sortByCostCB.SelectedIndex, discountCB = filterBydiscount.SelectedIndex, cbSeacrh = searchCB.SelectedIndex;
+                switch (costCB)
                 {
-                    case 0:
-                        services = services.Where(x => x.Description.ToLower().Contains(searchTB.Text.ToLower())).ToList();
-                        break;
                     case 1:
-                        services = services.Where(x => x.Title.ToLower().Contains(searchTB.Text.ToLower())).ToList();
+                        sl = sl.OrderBy(x => x.Cost).ToList();
+                        break;
+                    case 2:
+                        sl = sl.OrderByDescending(x => x.Cost).ToList();
                         break;
                 }
+                switch (discountCB)
+                {
+                    case 1:
+                        sl = sl.Where(x => x.Discount < 5 || x.Discount == null).ToList();
+                        break;
+                    case 2:
+                        sl = sl.Where(x => x.Discount >= 5 && x.Discount < 15).ToList();
+                        break;
+                    case 3:
+                        sl = sl.Where(x => x.Discount >= 15 && x.Discount < 30).ToList();
+                        break;
+                    case 4:
+                        sl = sl.Where(x => x.Discount >= 30 && x.Discount < 70).ToList();
+                        break;
+                    case 5:
+                        sl = sl.Where(x => x.Discount >= 70 && x.Discount < 100).ToList();
+                        break;
+                }
+                if (!String.IsNullOrEmpty(searchTB.Text))
+                {
+                    switch (cbSeacrh)
+                    {
+                        case 0:
+                            sl = sl.Where(x => x.Description.ToLower().Contains(searchTB.Text.ToLower())).ToList();
+                            break;
+                        case 1:
+                            sl = sl.Where(x => x.Title.ToLower().Contains(searchTB.Text.ToLower())).ToList();
+                            break;
+                    }
+                }
+                serviceLV.ItemsSource = sl;
+                countCurrentRecordsTB.Text = $"Текущее количество записей: {sl.Count()}";
+                countAllRecordsTB.Text = $"Общее количество записей: {DBHelper.le.Service.ToList().Count()}";
             }
-            serviceLV.ItemsSource = services;
+            catch { }
         }
 
         private void filterBydiscount_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -271,12 +295,8 @@ namespace Learn_Morozov
 
                 window.Closing += (obj, args) =>
                 {
-                    if (edited)
-                    {
-                        clearSort();
-                        serviceLV.ItemsSource = DBHelper.le.Service.ToList();
-                    }
-                    edited = false;
+                    clearSort();
+                    serviceLV.ItemsSource = DBHelper.le.Service.ToList();
                     isWindowOpened = false;
                 };
             }
@@ -292,12 +312,29 @@ namespace Learn_Morozov
             if (res == MessageBoxResult.Yes)
             {
                 int id = Convert.ToInt32((sender as Button).Uid);
-                Service s = DBHelper.le.Service.FirstOrDefault(x => x.ID == id);
-                DBHelper.le.Service.Remove(s);
-                DBHelper.le.SaveChanges();
+                List<ClientService> cs = DBHelper.le.ClientService.Where(x => x.ServiceID == id).ToList();
+                if (cs.Count == 0)
+                {
+                    List<ServicePhoto> sp = DBHelper.le.ServicePhoto.Where(x=>x.ServiceID == id).ToList();
+                    if (sp.Count != 0)
+                    {
+                        foreach (ServicePhoto p in sp)
+                        {
+                            DBHelper.le.ServicePhoto.Remove(p);
+                        }
+                    }
+                    Service s = DBHelper.le.Service.FirstOrDefault(x => x.ID == id);
+                    DBHelper.le.Service.Remove(s);
+                    DBHelper.le.SaveChanges();
 
-                clearSort();
-                serviceLV.ItemsSource = DBHelper.le.Service.ToList();
+                    clearSort();
+                    serviceLV.ItemsSource = DBHelper.le.Service.ToList();
+                    countAllRecordsTB.Text = $"Общее количество записей: {DBHelper.le.Service.ToList().Count()}";
+                }
+                else
+                {
+                    MessageBox.Show("Невозможно удалить услугу, так как на нее назаначена запись!");
+                }
             }
         }
 
@@ -316,6 +353,26 @@ namespace Learn_Morozov
                     isWindowOpened = false;
                 };
             }
+            else
+            {
+                MessageBox.Show("Окно уже открыто");
+            }
+        }
+
+        private void borderB_Loaded(object sender, RoutedEventArgs e)
+        {
+            int id = Convert.ToInt32((sender as Border).Uid);
+            Service s = DBHelper.le.Service.FirstOrDefault(x => x.ID == id);
+            if (!String.IsNullOrEmpty(s.Discount.ToString()) && s.Discount != 0)
+            {
+                (sender as Border).BorderBrush = new SolidColorBrush(Color.FromRgb(181, 230, 29));
+                (sender as Border).Background = new SolidColorBrush(Color.FromRgb(231, 250, 191));
+            }
+        }
+
+        private void searchCB_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            filter();
         }
     }
 }

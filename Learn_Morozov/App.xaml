@@ -4,6 +4,20 @@
              xmlns:local="clr-namespace:Learn_Morozov"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <Style TargetType="Button">
+            <Style.Triggers>
+                <Trigger Property="IsMouseCaptureWithin" Value="True">
+                    <Setter Property="Background" Value="#91c8df"/>
+                </Trigger>
+            </Style.Triggers>
+            <Style.Setters>
+                <Setter Property="Background" Value="#04a0fa"/>
+                <Setter Property="FontFamily" Value="Comic Sans MS"/>
+                <Setter Property="Cursor" Value="Hand"/>
+            </Style.Setters>
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+        </Style>
     </Application.Resources>
 </Application>
