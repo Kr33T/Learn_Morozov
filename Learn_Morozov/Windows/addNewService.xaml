@@ -1,0 +1,83 @@
+﻿<Window x:Class="Learn_Morozov.addNewService"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Learn_Morozov"
+        mc:Ignorable="d"
+        Title="addNewService" Height="450" Width="800" KeyDown="Window_KeyDown">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="4*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.2*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Label Name="serviceID" Foreground="Gray"/>
+
+            <Image Width="200" Height="200" Margin="10" Grid.Row="1" Name="imageI"/>
+
+            <StackPanel Grid.Row="2" Visibility="Hidden" Name="buttonsSP">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top">
+                    <Button Width="170" Content="Удалить" Margin="5" Name="deletePhotoBTN" Click="deletePhotoBTN_Click"/>
+                </StackPanel>
+                <Button Content="Открыть галерею" Width="170" Name="openGaleryBTN" Click="openGaleryBTN_Click"/>
+            </StackPanel>
+
+            <StackPanel Name="newImageSP" Grid.Row="2">
+                <Button Name="addNewBTN" Click="addNewBTN_Click" Width="170" Content="Добавить фото" Margin="5"/>
+            </StackPanel>
+            
+        </Grid>
+        
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/> 
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="0.6*"/> 
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" VerticalAlignment="Center">
+                <GroupBox Header="Название">
+                    <TextBox Name="serviceTitleTB" Height="25" Margin="10"/>
+                </GroupBox>
+            </StackPanel>
+
+            <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center">
+                <GroupBox Header="Цена">
+                    <TextBox Name="serviceCostTB" Height="25" Margin="10" Width="235"/>
+                </GroupBox>
+                <GroupBox Header="Скидка">
+                    <TextBox Name="serviceDiscountTB" Height="25" Margin="10" Width="235"/>
+                </GroupBox>
+            </StackPanel>
+
+            <StackPanel Grid.Row="2" VerticalAlignment="Center">
+                <GroupBox Header="Продолжительность">
+                    <TextBox Name="serviceDurationTB" Height="25" Margin="10"/>
+                </GroupBox>
+            </StackPanel>
+
+            <StackPanel Grid.Row="3" VerticalAlignment="Center">
+                <GroupBox Header="Описание">
+                    <TextBox Name="serviceDescriptionTB" Grid.Row="3" Margin="10" Height="85" TextWrapping="Wrap"/>
+                </GroupBox>
+            </StackPanel>
+
+            <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                <Button Content="Отмена" Height="30" Width="80" Name="cancelBTN" Click="cancelBTN_Click"/>
+                <Button Content="Сохранить" Height="30" Width="80" Margin="10 0 10 0" Name="saveChangesBTN" Click="saveChangesBTN_Click"/>
+            </StackPanel>
+
+        </Grid>
+        
+    </Grid>
+</Window>

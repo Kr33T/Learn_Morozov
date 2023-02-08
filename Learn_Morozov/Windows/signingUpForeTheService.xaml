@@ -1,0 +1,46 @@
+﻿<Window x:Class="Learn_Morozov.signingUpForeTheService"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Learn_Morozov"
+        mc:Ignorable="d"
+        Title="signingUpForeTheService" Height="250" Width="400">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" HorizontalAlignment="Center" Orientation="Vertical" VerticalAlignment="Center">
+            <Label Content="Запись на услугу"/>
+            <TextBlock Name="serviceDetailsL" TextWrapping="Wrap"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <GroupBox Header="Клиент">
+                <ComboBox Name="clientCB"/>
+            </GroupBox>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <GroupBox Header="Дата">
+                    <DatePicker Width="150" Name="dateOfServiceDP" SelectedDateChanged="dateOfServiceDP_SelectedDateChanged"/>
+                </GroupBox>
+                <GroupBox Header="Время">
+                    <TextBox Name="timeOfServiceTB" Width="150" TextChanged="timeOfServiceTB_TextChanged" MaxLength="5"/>
+                </GroupBox>
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Name="timeOfEndingTB"/>
+        </StackPanel>
+        
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Name="cancelBTN" Content="Отмена" Width="80" Height="25" Click="cancelBTN_Click"/>
+            <Button Name="addBTN" Content="Записать" Width="80" Height="25" Margin="10 0 10 0" Click="addBTN_Click"/>
+        </StackPanel>
+        
+    </Grid>
+</Window>
